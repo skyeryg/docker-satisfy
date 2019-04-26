@@ -41,10 +41,6 @@ EOF
 fi
 
 if [[ -n ${GITHUB_TOKEN} ]]; then
-  # composer config -g github-oauth.github.com ${GITHUB_TOKEN} && \
-  # mkdir -p /app/.composer && \
-  # cp -a /root/.composer/auth.json /app/.composer/ && \
-  # chown -R satisfy.satisfy /app/.composer
   su - satisfy -c "composer config -g github-oauth.github.com ${GITHUB_TOKEN}"
 fi
 
