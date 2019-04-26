@@ -21,7 +21,7 @@ SATIS_FILE="${APP_ROOT}/satis.json"
 : ${STRICT_HOST_KEY_CHECKING:-default set down below}
 
 : ${CRON_ENABLED:=true}
-: ${CRON_SYNC_EVERY:=60}
+: ${CRON_SYNC_EVERY:=600}
 
 APP_USER_HOME="$(awk -F: -v user="${APP_USER}" '$1==user {print $6}' /etc/passwd)"
 
@@ -34,10 +34,19 @@ parameters:
   admin.auth: ${ADMIN_AUTH}
   admin.users: ${ADMIN_USERS}
   composer.home: "%kernel.project_dir%/.composer"
+  github.secret: "${SECRET}"
+  gitlab.secret: "${SECRET}"
 EOF
   chown ${APP_USER}:${APP_USER} ${PARAM_FILE}
 fi
 
+if [[ -n ${GITHUB_TOKEN} ]]; then
+  # composer config -g github-oauth.github.com ${GITHUB_TOKEN} && \
+  # mkdir -p /app/.composer && \
+  # cp -a /root/.composer/auth.json /app/.composer/ && \
+  # chown -R satisfy.satisfy /app/.composer
+  su - satisfy -c "composer config -g github-oauth.github.com ${GITHUB_TOKEN}"
+fi
 
 if [[ ! -e ${SATIS_FILE} ]]; then
   cat >${SATIS_FILE} <<EOF

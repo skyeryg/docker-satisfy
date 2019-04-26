@@ -21,7 +21,7 @@ RUN \
     apk add --no-cache php7-apcu php7-bcmath php7-ctype php7-curl php7-dom php7-fileinfo \
       php7-iconv php7-json php7-mbstring php7-openssl php7-phar php7-session \
       php7-simplexml php7-xml php7-xmlwriter php7-tokenizer \
-      nginx unit-php7 \
+      nginx unit-php7 procps curl bash \
       procmail libxml2-dev inotify-tools jq zip curl openssh-client git && \
     apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community gnu-libiconv && \
     apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing gosu && \
@@ -33,7 +33,10 @@ RUN \
 WORKDIR ${APP_ROOT}
 
 RUN \
-    yes | composer create-project --no-dev playbloom/satisfy . ${SATISFY_VERSION} && \
+    git clone https://github.com/ludofleury/satisfy.git . && \
+    chown -R satisfy.satisfy * && \
+    composer global require hirak/prestissimo && \
+    yes | composer install && \
     rm ${APP_ROOT}/app/config/parameters.yml && \
     echo "HTTP server is up" > ${APP_ROOT}/web/serverup.txt && \
     chown -R ${APP_USER}:${APP_USER} ${APP_ROOT}
