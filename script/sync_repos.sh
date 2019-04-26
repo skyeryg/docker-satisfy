@@ -17,6 +17,9 @@ function unlock(){
 	rm ${LOCKFILE}
 }
 
+# first sync on startup
+${APP_ROOT}/bin/satis build ${APP_ROOT}/satis.json ${APP_ROOT}/web
+
 while true; do
   sleep ${SYNC_EVERY}
   if [[ -e ${APP_ROOT}/satis.json ]]; then
