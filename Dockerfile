@@ -34,7 +34,6 @@ WORKDIR ${APP_ROOT}
 
 RUN \
     git clone https://github.com/ludofleury/satisfy.git . && \
-    git checkout tags/${SATISFY_VERSION} && \
     chown -R satisfy.satisfy * && \
     composer global require hirak/prestissimo && \
     yes | composer install && \
