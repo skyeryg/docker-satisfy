@@ -22,6 +22,7 @@ SATIS_FILE="${APP_ROOT}/satis.json"
 
 : ${CRON_ENABLED:=true}
 : ${CRON_SYNC_EVERY:=600}
+: ${GITHUB_TOKEN:=unset}
 
 APP_USER_HOME="$(awk -F: -v user="${APP_USER}" '$1==user {print $6}' /etc/passwd)"
 
@@ -40,7 +41,7 @@ EOF
   chown ${APP_USER}:${APP_USER} ${PARAM_FILE}
 fi
 
-if [[ -n ${GITHUB_TOKEN} ]]; then
+if [[ "${GITHUB_TOKEN}" != "unset" ]]; then
   su - satisfy -c "composer config -g github-oauth.github.com ${GITHUB_TOKEN}"
 fi
 
